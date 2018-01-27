@@ -175,22 +175,20 @@ $(window).load(function () {
                 content = content + '</div>';
                 container.append(content);
             });
-            /*var items = data.items.map(function (item) {
-                return item.key + ': ' + item.value;
-            });
-            showData.empty();
-            if (items.length) {
-                var content = '<li>' + items.join('</li><li>') + '</li>';
-                var list = $('<ul />').html(content);
-                showData.append(list);
-            }*/
         }
     });
     
     function getImage(name){
         if(name == "ForgeScratch" || name == "Comet" || name == "VixenSequences"){
             return name;
-        } else {
+        } 
+        else if(name.startsWith("5619") || name == "Social-Innovations" || name == "SchoologyReloaded" || name.startsWith("Robotics") || name.startsWith("Redshift")){
+            return "saas";
+        }
+        else if(name.startsWith("Cydia--")){
+            return "Cydia";
+        }
+        else {
             return "GitHub";
         }
     }
