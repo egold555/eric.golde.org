@@ -160,17 +160,20 @@ $(window).load(function () {
         initialise();
     }.call(this));
 
-    var showData = $('#show-data');
+    var container = $('.container');
     $.ajax({
-        url: "https://api.github.com/users/egold555/repos",
-        /*jsonp: true,*/
-        method: "GET",
+        url: "https://api.github.com/users/egold555/repos?per_page=100",
+        /*method: "GET",*/
         dataType: "json",
         success: function (data) {
-            //console.log(data);
-            console.log("Success!");
             $.each(data, function (i, item) {
-                console.log(data[i].name);
+                var content = '<div class="project">\n';
+                content = content + '<img src="images/' + getImage(data[i].name) + '.png">\n';
+                content = content + '<h2 class="header">' + getDisplayName(data[i].name) + '</h2>\n';
+                content = content + '<p class="description">' + getDescription(data[i].description) + '</p>\n';
+                content = content + '<a class="btn" href="' + data[i].html_url + '" title="View Project">View Project</a>\n';
+                content = content + '</div>';
+                container.append(content);
             });
             /*var items = data.items.map(function (item) {
                 return item.key + ': ' + item.value;
@@ -183,5 +186,34 @@ $(window).load(function () {
             }*/
         }
     });
+    
+    function getImage(name){
+        if(name == "ForgeScratch" || name == "Comet" || name == "VixenSequences"){
+            return name;
+        } else {
+            return "GitHub";
+        }
+    }
+    
+    function getDisplayName(name){
+        
+        if(name === "ForgeScratch"){
+           return "ScratchForge";
+        }
+        
+        name = name.replace(/([A-Z])/g, ' $1').trim();
+        
+        return name;
+    }
+    
+    function getDescription(desc){
+        if(desc === null){
+            return "No Description Available 🙁";
+        }
+        if(desc.length >= 100){
+            return desc.slice(0, 100) + " . . .";
+        }
+        return desc;
+    }
 
 });
