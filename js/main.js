@@ -180,7 +180,7 @@ $(window).load(function () {
     });
 
     function getImage(name) {
-        if (name == "ForgeScratch") {
+        if (name == "ForgeScratch" || name == "TheSpookReturns") {
             return name;
         } else if (name.startsWith("5619") || name == "Social-Innovations" || name == "SchoologyReloaded" || name.startsWith("Robotics") || name.startsWith("Redshift")) {
             return "SAAS";
@@ -193,6 +193,15 @@ $(window).load(function () {
         } 
         else if (name == "Comet" || name == "VixenSequences") {
             return "Comet";
+        } 
+        else if (name == "AltPumpBot" || name == "ForgeScratch-OLD") {
+            return "JAVA";
+        }
+        else if (name == "DieWebsiteDIE" || name == "EditThatSite" || name == "SchoologyReloaded" || name == "SkypeFormatter" || name == "THREE.js-Tunnel-Thingy" || name == "eric.golde.org") {
+            return "HTML";
+        } 
+        else if (name == "DesktopSlider" || name == "illuminati" || name == "YouAreAnIdiot" || name == "SSHMusicPlayer" || name == "spotifydownloader" || name == "SSHMusicPlayer" || name == "EricsFakeVirusJoke" || name == "relocateWindow") {
+            return "C-SHARP";
         } 
         else if (name == "AtseUHC" || name == "BetterCreative" || name == "Cluster" || name == "Crotus-Issues" || name == "EricsBetterClientMod" || name == "Forge-1.11-Base-With-Helpers" || name == "Gulp" || name == "KlawScoreboard" || name == "OroUhcPlugins" || name == "Project-Cicada" || name == "RedHCF" || name == "ReflectionHelper" || name == "ReplaceModsWithForgeCSVMappingsGUI" || name == "TempestsBox") {
             return "Minecraft";
