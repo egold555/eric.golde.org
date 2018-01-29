@@ -167,6 +167,7 @@ $(window).load(function () {
         dataType: "json",
         success: function (data) {
             $.each(data, function (i, item) {
+                console.log(data[i].name)
                 var content = '<div class="project">\n';
                 content = content + '<img src="images/' + getImage(data[i].name) + '.png">\n';
                 content = content + '<h2 class="header">' + getDisplayName(data[i].name) + '</h2>\n';
@@ -177,38 +178,46 @@ $(window).load(function () {
             });
         }
     });
-    
-    function getImage(name){
-        if(name == "ForgeScratch" || name == "Comet" || name == "VixenSequences"){
+
+    function getImage(name) {
+        if (name == "ForgeScratch") {
             return name;
+        } else if (name.startsWith("5619") || name == "Social-Innovations" || name == "SchoologyReloaded" || name.startsWith("Robotics") || name.startsWith("Redshift")) {
+            return "SAAS";
         } 
-        else if(name.startsWith("5619") || name == "Social-Innovations" || name == "SchoologyReloaded" || name.startsWith("Robotics") || name.startsWith("Redshift")){
-            return "saas";
-        }
-        else if(name.startsWith("Cydia--")){
+        else if (name.startsWith("Cydia--")) {
             return "Cydia";
+        } 
+        else if (name.startsWith("CorpseReborn") || name.startsWith("UrlToBlock") || name == "ImageFirewoksReborn") {
+            return "Spigot";
+        } 
+        else if (name == "Comet" || name == "VixenSequences") {
+            return "Comet";
+        } 
+        else if (name == "AtseUHC" || name == "BetterCreative" || name == "Cluster" || name == "Crotus-Issues" || name == "EricsBetterClientMod" || name == "Forge-1.11-Base-With-Helpers" || name == "Gulp" || name == "KlawScoreboard" || name == "OroUhcPlugins" || name == "Project-Cicada" || name == "RedHCF" || name == "ReflectionHelper" || name == "ReplaceModsWithForgeCSVMappingsGUI" || name == "TempestsBox") {
+            return "Minecraft";
         }
         else {
             return "GitHub";
         }
     }
-    
-    function getDisplayName(name){
-        
-        if(name === "ForgeScratch"){
-           return "ScratchForge";
+
+    function getDisplayName(name) {
+
+        if (name === "ForgeScratch") {
+            return "ScratchForge";
         }
-        
+
         name = name.replace(/([A-Z])/g, ' $1').trim();
-        
+
         return name;
     }
-    
-    function getDescription(desc){
-        if(desc === null){
+
+    function getDescription(desc) {
+        if (desc === null) {
             return "No Description Available 🙁";
         }
-        if(desc.length >= 100){
+        if (desc.length >= 100) {
             return desc.slice(0, 100) + " . . .";
         }
         return desc;
