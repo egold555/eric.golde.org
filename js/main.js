@@ -167,7 +167,6 @@ $(window).load(function () {
         dataType: "json",
         success: function (data) {
             $.each(data, function (i, item) {
-                console.log(data[i].name)
                 var content = '<div class="project">\n';
                 content = content + '<img src="images/' + getImage(data[i].name) + '.png">\n';
                 content = content + '<h2 class="header">' + getDisplayName(data[i].name) + '</h2>\n';
