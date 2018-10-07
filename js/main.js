@@ -178,34 +178,44 @@ $(window).load(function () {
         }
     });
 
+    //I should make this a function but for the sake of I need to get this done it will not be a function.
+    $.ajax({
+        url: "https://api.github.com/users/egold555/repos?per_page=100&page=2",
+        /*method: "GET",*/
+        dataType: "json",
+        success: function (data) {
+            $.each(data, function (i, item) {
+                var content = '<div class="project">\n';
+                content = content + '<img src="images/' + getImage(data[i].name) + '.png">\n';
+                content = content + '<h2 class="header">' + getDisplayName(data[i].name) + '</h2>\n';
+                content = content + '<p class="description">' + getDescription(data[i].description) + '</p>\n';
+                content = content + '<a class="btn" href="' + data[i].html_url + '" title="View Project">View Project</a>\n';
+                content = content + '</div>';
+                container.append(content);
+            });
+        }
+    });
+
     function getImage(name) {
         if (name == "ForgeScratch" || name == "TheSpookReturns") {
             return name;
         } else if (name.startsWith("5619") || name == "Social-Innovations" || name == "SchoologyReloaded" || name.startsWith("Robotics") || name.startsWith("Redshift")) {
             return "SAAS";
-        } 
-        else if (name.startsWith("Cydia--")) {
+        } else if (name.startsWith("Cydia--")) {
             return "Cydia";
-        } 
-        else if (name.startsWith("CorpseReborn") || name.startsWith("UrlToBlock") || name == "ImageFirewoksReborn") {
+        } else if (name.startsWith("CorpseReborn") || name.startsWith("UrlToBlock") || name == "ImageFirewoksReborn") {
             return "Spigot";
-        } 
-        else if (name == "Comet" || name == "VixenSequences") {
+        } else if (name == "Comet" || name == "VixenSequences") {
             return "Comet";
-        } 
-        else if (name == "AltPumpBot" || name == "ForgeScratch-OLD") {
+        } else if (name == "AltPumpBot" || name == "ForgeScratch-OLD") {
             return "JAVA";
-        }
-        else if (name == "DieWebsiteDIE" || name == "EditThatSite" || name == "SchoologyReloaded" || name == "SkypeFormatter" || name == "THREE.js-Tunnel-Thingy" || name == "eric.golde.org") {
+        } else if (name == "DieWebsiteDIE" || name == "EditThatSite" || name == "SchoologyReloaded" || name == "SkypeFormatter" || name == "THREE.js-Tunnel-Thingy" || name == "eric.golde.org") {
             return "HTML";
-        } 
-        else if (name == "DesktopSlider" || name == "illuminati" || name == "YouAreAnIdiot" || name == "SSHMusicPlayer" || name == "spotifydownloader" || name == "SSHMusicPlayer" || name == "EricsFakeVirusJoke" || name == "relocateWindow") {
+        } else if (name == "DesktopSlider" || name == "illuminati" || name == "YouAreAnIdiot" || name == "SSHMusicPlayer" || name == "spotifydownloader" || name == "SSHMusicPlayer" || name == "EricsFakeVirusJoke" || name == "relocateWindow") {
             return "C-SHARP";
-        } 
-        else if (name == "AtseUHC" || name == "BetterCreative" || name == "Cluster" || name == "Crotus-Issues" || name == "EricsBetterClientMod" || name == "Forge-1.11-Base-With-Helpers" || name == "Gulp" || name == "KlawScoreboard" || name == "OroUhcPlugins" || name == "Project-Cicada" || name == "RedHCF" || name == "ReflectionHelper" || name == "ReplaceModsWithForgeCSVMappingsGUI" || name == "TempestsBox") {
+        } else if (name == "AtseUHC" || name == "BetterCreative" || name == "Cluster" || name == "Crotus-Issues" || name == "EricsBetterClientMod" || name == "Forge-1.11-Base-With-Helpers" || name == "Gulp" || name == "KlawScoreboard" || name == "OroUhcPlugins" || name == "Project-Cicada" || name == "RedHCF" || name == "ReflectionHelper" || name == "ReplaceModsWithForgeCSVMappingsGUI" || name == "TempestsBox") {
             return "Minecraft";
-        }
-        else {
+        } else {
             return "GitHub";
         }
     }
