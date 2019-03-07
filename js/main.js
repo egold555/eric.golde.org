@@ -161,40 +161,50 @@ $(window).load(function () {
     }.call(this));
 
     var container = $('.container');
-    $.ajax({
-        url: "https://api.github.com/users/egold555/repos?per_page=100",
-        /*method: "GET",*/
-        dataType: "json",
-        success: function (data) {
-            $.each(data, function (i, item) {
-                var content = '<div class="project">\n';
-                content = content + '<img src="images/' + getImage(data[i].name) + '.png">\n';
-                content = content + '<h2 class="header">' + getDisplayName(data[i].name) + '</h2>\n';
-                content = content + '<p class="description">' + getDescription(data[i].description) + '</p>\n';
-                content = content + '<a class="btn" href="' + data[i].html_url + '" title="View Project">View Project</a>\n';
-                content = content + '</div>';
-                container.append(content);
+    var dataArray = [];
+
+    $.when(doAjaxGitRequest(1), doAjaxGitRequest(2)).done(function (a1, a2) {
+
+        console.log("Finished all ajax requests: " + dataArray.length);
+        
+        dataArray.sort(function (a, b) {
+                var textA = a.name.toUpperCase();
+                var textB = b.name.toUpperCase();
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
             });
-        }
+
+            for (var i = 0; i < dataArray.length; i++) {
+                //console.log(dataArray[i].name);
+                addDatasetToViewableContent(dataArray[i]);
+            }
     });
 
-    //I should make this a function but for the sake of I need to get this done it will not be a function.
-    $.ajax({
-        url: "https://api.github.com/users/egold555/repos?per_page=100&page=2",
-        /*method: "GET",*/
-        dataType: "json",
-        success: function (data) {
-            $.each(data, function (i, item) {
-                var content = '<div class="project">\n';
-                content = content + '<img src="images/' + getImage(data[i].name) + '.png">\n';
-                content = content + '<h2 class="header">' + getDisplayName(data[i].name) + '</h2>\n';
-                content = content + '<p class="description">' + getDescription(data[i].description) + '</p>\n';
-                content = content + '<a class="btn" href="' + data[i].html_url + '" title="View Project">View Project</a>\n';
-                content = content + '</div>';
-                container.append(content);
-            });
-        }
-    });
+
+    function doAjaxGitRequest(page) {
+        return $.ajax({
+            url: "https://api.github.com/users/egold555/repos?per_page=100&page=" + page,
+            /*method: "GET",*/
+            dataType: "json",
+            success: function (data) {
+                $.each(data, function (i, item) {
+
+                    dataArray.push(data[i]);
+                });
+
+            }
+        });
+    }
+
+    function addDatasetToViewableContent(item){
+        var content = '<div class="project">\n';
+                    content = content + '<img src="images/' + getImage(item.name) + '.png">\n';
+                    content = content + '<h2 class="header">' + getDisplayName(item.name) + '</h2>\n';
+                    content = content + '<p class="description">' + getDescription(item.description) + '</p>\n';
+                    content = content + '<a class="btn" href="' + item.html_url + '" title="View Project">View Project</a>\n';
+                    content = content + '</div>';
+                    container.append(content);
+    }
+    
 
     function getImage(name) {
         if (name == "ForgeScratch" || name == "TheSpookReturns") {
