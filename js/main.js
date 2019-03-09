@@ -7,6 +7,7 @@ $(window).load(function () {
             if (mode == 0) {
                 $("#projectsBox").fadeIn();
                 $(".darkerOverlay").fadeIn();
+                $('.container').isotope(); //relay the grid out when we open it. ot sure why it does not like hidden divs.
                 mode = 1;
             } else {
                 $("#projectsBox").fadeOut();
@@ -166,17 +167,20 @@ $(window).load(function () {
     $.when(doAjaxGitRequest(1), doAjaxGitRequest(2)).done(function (a1, a2) {
 
         console.log("Finished all ajax requests: " + dataArray.length);
-        
-        dataArray.sort(function (a, b) {
-                var textA = a.name.toUpperCase();
-                var textB = b.name.toUpperCase();
-                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-            });
 
-            for (var i = 0; i < dataArray.length; i++) {
-                //console.log(dataArray[i].name);
-                addDatasetToViewableContent(dataArray[i]);
-            }
+        dataArray.sort(function (a, b) {
+            var textA = a.name.toUpperCase();
+            var textB = b.name.toUpperCase();
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
+
+        for (var i = 0; i < dataArray.length; i++) {
+            //console.log(dataArray[i].name);
+            addDatasetToViewableContent(dataArray[i]);
+        }
+        
+        loadSearchableItems();
+        
     });
 
 
@@ -195,16 +199,16 @@ $(window).load(function () {
         });
     }
 
-    function addDatasetToViewableContent(item){
+    function addDatasetToViewableContent(item) {
         var content = '<div class="project">\n';
-                    content = content + '<img src="images/' + getImage(item.name) + '.png">\n';
-                    content = content + '<h2 class="header">' + getDisplayName(item.name) + '</h2>\n';
-                    content = content + '<p class="description">' + getDescription(item.description) + '</p>\n';
-                    content = content + '<a class="btn" href="' + item.html_url + '" title="View Project">View Project</a>\n';
-                    content = content + '</div>';
-                    container.append(content);
+        content = content + '<img src="images/' + getImage(item.name) + '.png">\n';
+        content = content + '<h2 class="header">' + getDisplayName(item.name) + '</h2>\n';
+        content = content + '<p class="description">' + getDescription(item.description) + '</p>\n';
+        content = content + '<a class="btn" href="' + item.html_url + '" title="View Project">View Project</a>\n';
+        content = content + '</div>';
+        container.append(content);
     }
-    
+
 
     function getImage(name) {
         if (name == "ForgeScratch" || name == "TheSpookReturns") {
@@ -250,5 +254,48 @@ $(window).load(function () {
         }
         return desc;
     }
+
+
+
+    function loadSearchableItems() {
+        //Search bar for projects
+        // quick search regex
+        var qsRegex;
+
+        // init Isotope
+        var $grid = $('.container').isotope({
+            itemSelector: '.project',
+            layoutMode: 'fitRows',
+            filter: function () {
+                return qsRegex ? $(this).text().match(qsRegex) : true;
+            }
+        });
+
+        // use value of search field to filter
+        var $quicksearch = $('.quicksearch').keyup(debounce(function () {
+            qsRegex = new RegExp($quicksearch.val(), 'gi');
+            $grid.isotope();
+            console.log("Search method being called");
+        }, 200));
+
+        // debounce so filtering doesn't happen every millisecond
+        function debounce(fn, threshold) {
+            var timeout;
+            threshold = threshold || 100;
+            return function debounced() {
+                clearTimeout(timeout);
+                var args = arguments;
+                var _this = this;
+
+                function delayed() {
+                    fn.apply(_this, args);
+                }
+                timeout = setTimeout(delayed, threshold);
+            };
+        }
+    }
+
+
+
 
 });
