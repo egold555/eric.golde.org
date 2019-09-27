@@ -88,18 +88,18 @@ a {
 }
 
 a:hover {
-    color: #fff!important;
+    color: #fff !important;
     opacity: 1;
-    outline: none!important;
-    text-decoration: none!important;
+    outline: none !important;
+    text-decoration: none !important;
     text-shadow: 0 0 1ex #fff, 0 0 4px #fff;
 }
 
 a:active,
 a:focus {
     color: #fff;
-    outline: none!important;
-    text-decoration: none!important;
+    outline: none !important;
+    text-decoration: none !important;
 }
 
 video#bgvid {
@@ -138,9 +138,14 @@ video#bgvid {
 
 #container .item-title .link-bottom .link-icon {
     font-size: 32px;
+    /*
     margin-left: 8px;
     margin-right: 8px;
-    margin-bottom: 24px;
+*/
+    margin-left: 6px;
+    margin-right: 6px;
+    /*    margin-bottom: 24px;*/
+    margin-top: 30px;
 }
 
 #container .item-title #message {
@@ -164,6 +169,7 @@ video#bgvid {
 
 #container .item-title .link-bottom {
     max-width: 600px;
+    /*Need this to keep it all alighed with the Eric Golde*/
     padding: 12px;
     margin: 0 auto;
     animation-delay: 5s;
@@ -184,7 +190,6 @@ video#bgvid {
     opacity: 1;
 }
 
-/*Dark theme :)*/
 p {
     color: white;
 }
@@ -291,9 +296,36 @@ p {
     width: 1em;
 }
 
-.scrollable::-webkit-scrollbar-thumb
-{
-	border-radius: 10px;
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-	background-color: #555;
+.scrollable::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: #555;
+}
+
+div.item {
+    vertical-align: top;
+    display: inline-block;
+    text-align: center;
+    margin-top: 4px;
+    /*idk why its being nudged up*/
+/*    color: #a4a4a4;*/
+
+}
+
+.caption {
+    display: block;
+}
+
+/*I know I know its bad practice, but It works. Credit: https://css-tricks.com/how-to-disable-links/*/
+.isDisabled {
+    color: currentColor;
+    cursor: not-allowed;
+    opacity: 0.5;
+    text-decoration: none;
+}
+
+.isDisabled > a {
+  color: currentColor;
+  pointer-events: none;
+  text-decoration: none;
 }
