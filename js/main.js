@@ -210,10 +210,13 @@ $(window).load(function () {
     }
 
 
+    //TODO: Find a better way of doing this
     function getImage(name) {
         if (name == "ForgeScratch" || name == "TheSpookReturns") {
             return name;
-        } else if (name.startsWith("5619") || name == "Social-Innovations" || name == "SchoologyReloaded" || name.startsWith("Robotics") || name.startsWith("Redshift")) {
+        } if (name.includes("PLU") || name.includes("Pacific Luthern Univercity")) {
+            return "PLU";
+        } else if (name.startsWith("5619") || name == "Social-Innovations" || name == "SchoologyReloaded" || name.startsWith("Redshift")) {
             return "SAAS";
         } else if (name.startsWith("Cydia--")) {
             return "Cydia";
