@@ -13,12 +13,12 @@
     
     {
         "name": "Pacific Lutheran University",
-        "img": "custom/plu",
+        "img": "custom/PLU",
         "matchType": "includes"
     },
     {
         "name": "PLU",
-        "img": "custom/plu",
+        "img": "custom/PLU",
         "matchType": "includes"
     },
     
@@ -48,11 +48,6 @@
         "matchType": "equals"
     },
     
-    {
-        "name": "AltPumpBot",
-        "img": "lang/java",
-        "matchType": "equals"
-    },
     {
         "name": "Cydia--",
         "img": "custom/Cydia",

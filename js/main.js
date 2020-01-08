@@ -420,6 +420,6 @@ $(window).load(function () {
     //fun little developer message :)
     console.log("Hi there, fellow developer! Thanks for visiting my personal website! \n\nMy code is a MESS. Like a real cluster f**k. Its basically just patches on top of patches in hopes things work. \n\nTheres also a lot of code that just need to be removed because it never is actually called. \n\nI’d love to hear what you think though about my website though! \n\nFeel free to poke around in the code, or you can video the code on GitHub: \nhttps://github.com/egold555/eric.golde.org \n\nLast Updated: 1/7/2020 11:45 PM");
     
-    console.image("https://avatars1.githubusercontent.com/u/2999543?v=4", 1);
+    console.image("https://eric.golde.org/images/Avatar.png", 1);
 
 });
