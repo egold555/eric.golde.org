@@ -164,10 +164,13 @@ $(window).load(function () {
     var container = $('.container');
     var dataArray = [];
 
-    $.when(doAjaxGitRequest(1), doAjaxGitRequest(2)).done(function (a1, a2) {
+    const DEBUG = false;
 
-        console.log("Finished all ajax requests: " + dataArray.length);
+    $.when(doAjaxGitRequest(1), doAjaxGitRequest(2), doImgJsonRequest()).done(function (a1, a2) {
 
+        if (DEBUG) {
+            console.log("Finished all ajax requests: " + dataArray.length);
+        }
         dataArray.sort(function (a, b) {
             var textA = a.name.toUpperCase();
             var textB = b.name.toUpperCase();
@@ -178,10 +181,14 @@ $(window).load(function () {
             //console.log(dataArray[i].name);
             addDatasetToViewableContent(dataArray[i]);
         }
-        
+
+        if (DEBUG) {
+            printDebugLanguages();
+        }
         loadSearchableItems();
-        
+
     });
+
 
 
     function doAjaxGitRequest(page) {
@@ -192,16 +199,39 @@ $(window).load(function () {
             success: function (data) {
                 $.each(data, function (i, item) {
 
-                    dataArray.push(data[i]);
+                    var theObj = data[i];
+                    
+                    dataArray.push(theObj);
                 });
 
             }
         });
     }
 
+    var imageDataArray = [];
+
+    function doImgJsonRequest() {
+        return $.ajax({
+            url: "images.json",
+            /*method: "GET",*/
+            dataType: "json",
+            success: function (data) {
+                $.each(data, function (i, item) {
+                    //console.log(data[i]);
+                    imageDataArray.push(data[i]);
+
+                });
+                
+                if (DEBUG) {
+                    console.log(imageDataArray);
+                }
+            }
+        });
+    }
+
     function addDatasetToViewableContent(item) {
         var content = '<div class="project">\n';
-        content = content + '<img src="images/' + getImage(item.name) + '.png">\n';
+        content = content + '<img src="images/' + getImage(item) + '.png">\n';
         content = content + '<h2 class="header">' + getDisplayName(item.name) + '</h2>\n';
         content = content + '<p class="description">' + getDescription(item.description) + '</p>\n';
         content = content + '<a class="btn" href="' + item.html_url + '" title="View Project">View Project</a>\n';
@@ -210,37 +240,104 @@ $(window).load(function () {
     }
 
 
-    //TODO: Find a better way of doing this
-    function getImage(name) {
-        if (name == "ForgeScratch" || name == "TheSpookReturns") {
-            return name;
-        } if (name.includes("PLU") || name.includes("Pacific Luthern Univercity")) {
-            return "PLU";
-        } else if (name.startsWith("5619") || name == "Social-Innovations" || name == "SchoologyReloaded" || name.startsWith("Redshift")) {
-            return "SAAS";
-        } else if (name.startsWith("Cydia--")) {
-            return "Cydia";
-        } else if (name.startsWith("CorpseReborn") || name.startsWith("UrlToBlock") || name == "ImageFirewoksReborn") {
-            return "Spigot";
-        } else if (name == "Comet" || name == "VixenSequences") {
-            return "Comet";
-        } else if (name == "AltPumpBot" || name == "ForgeScratch-OLD") {
-            return "JAVA";
-        } else if (name == "DieWebsiteDIE" || name == "EditThatSite" || name == "SchoologyReloaded" || name == "SkypeFormatter" || name == "THREE.js-Tunnel-Thingy" || name == "eric.golde.org") {
-            return "HTML";
-        } else if (name == "DesktopSlider" || name == "illuminati" || name == "YouAreAnIdiot" || name == "SSHMusicPlayer" || name == "spotifydownloader" || name == "SSHMusicPlayer" || name == "EricsFakeVirusJoke" || name == "relocateWindow") {
-            return "C-SHARP";
-        } else if (name == "AtseUHC" || name == "BetterCreative" || name == "Cluster" || name == "Crotus-Issues" || name == "EricsBetterClientMod" || name == "Forge-1.11-Base-With-Helpers" || name == "Gulp" || name == "KlawScoreboard" || name == "OroUhcPlugins" || name == "Project-Cicada" || name == "RedHCF" || name == "ReflectionHelper" || name == "ReplaceModsWithForgeCSVMappingsGUI" || name == "TempestsBox") {
-            return "Minecraft";
-        } else {
-            return "GitHub";
+    
+    function getImage(item) {
+      
+        /*
+        
+        This makes no sence, but I got it working, 
+        for some reason (name.includes(imgData.name)) and (imgData.name.includes(name)) are NOT the same.
+        Like the f**k? How are they not the same? What kind of deamond magic is it??
+        
+        */
+
+        var name = item.name;
+        var desc = item.description;
+        var lang = item.language;
+
+        for (var i = 0; i < imageDataArray.length; i++) {
+            var imgData = imageDataArray[i];
+
+
+            //equals
+            if (imgData.matchType == "equals") {
+                if (name == imgData.name || name.includes(desc)) {
+                    return imgData.img;
+                }
+            }
+
+            //includes
+            else if (imgData.matchType == "includes") {
+                if (name.includes(imgData.name) || name.includes(desc)) {
+                    return imgData.img;
+                }
+            }
+
+            //startsWith
+            else if (imgData.matchType == "startsWith") {
+                if (name.startsWith(imgData.name) || name.includes(desc)) {
+                    return imgData.img;
+                }
+            } 
+            
+            //get image based off of language
+            
+            else if (lang == "HTML" || lang == "Java" || lang == "PHP" || lang == "C++" || lang == "JavaScript" || lang == "CSS" || lang == "C#" || lang == "Logos" || lang == "Shell" || lang == "Lua" || lang == "Visual Basic" || lang == "C" || lang == "TypeScript" || lang == "Python" || lang == "Arduino") {
+                return "lang/" + lang.replace("#", "Sharp");
+            }
+
+
+
         }
+
+        //default image if we don't have one in the json file
+        return "Github";
+
     }
 
+    //http://chrisjopa.com/2016/04/21/counting-word-frequencies-with-javascript/
+    //debuggging language images
+
+    function printDebugLanguages() {
+        var langArray = [];
+
+        for (var i = 0; i < dataArray.length; i++) {
+            langArray.push(dataArray[i].language);
+        }
+
+        var wordMap = createWordMap(langArray);
+        console.log(wordMap);
+    }
+
+    function createWordMap(wordsArray) {
+
+        // create map for word counts
+        var wordsMap = {};
+        /*
+          wordsMap = {
+            'Oh': 2,
+            'Feelin': 1,
+            ...
+          }
+        */
+        wordsArray.forEach(function (key) {
+            if (wordsMap.hasOwnProperty(key)) {
+                wordsMap[key]++;
+            } else {
+                wordsMap[key] = 1;
+            }
+        });
+
+        return wordsMap;
+
+    }
+
+    //should only split if the second letter is not a capitial
+    //PLU
     function getDisplayName(name) {
 
         if (name === "ForgeScratch") {
-            return "ScratchForge";
+            return "Scratch Forge";
         }
 
         name = name.replace(/([A-Z])/g, ' $1').trim();
@@ -278,7 +375,6 @@ $(window).load(function () {
         var $quicksearch = $('.quicksearch').keyup(debounce(function () {
             qsRegex = new RegExp($quicksearch.val(), 'gi');
             $grid.isotope();
-            console.log("Search method being called");
         }, 200));
 
         // debounce so filtering doesn't happen every millisecond
@@ -297,8 +393,33 @@ $(window).load(function () {
             };
         }
     }
+    
+    
+    
+    //displaying images in the console
+	console.image = function(url, scale) {
+		scale = scale || 1;
+		var img = new Image();
+
+		img.onload = function() {
+			var dim = getBox(this.width * scale, this.height * scale);
+			console.log("%c ", dim.style + "background: url(" + url + "); background-size: " + (this.width * scale) + "px " + (this.height * scale) + "px; color: transparent;");
+		};
+
+		img.src = url;
+	};
+    
+	function getBox(width, height) {
+		return {
+			string: "+",
+			style: "font-size: 1px; padding: 0 " + Math.floor(width/2) + "px; line-height: " + height + "px;"
+		}
+	}
 
 
-
+    //fun little developer message :)
+    console.log("Hi there, fellow developer! Thanks for visiting my personal website! \n\nMy code is a MESS. Like a real cluster f**k. Its basically just patches on top of patches in hopes things work. \n\nTheres also a lot of code that just need to be removed because it never is actually called. \n\nI’d love to hear what you think though about my website though! \n\nFeel free to poke around in the code, or you can video the code on GitHub: \nhttps://github.com/egold555/eric.golde.org \n\nLast Updated: 1/7/2020 11:45 PM");
+    
+    console.image("https://avatars1.githubusercontent.com/u/2999543?v=4", 1);
 
 });

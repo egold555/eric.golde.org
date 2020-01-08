@@ -287,6 +287,11 @@ p {
     color: #fff;
 }
 
+#projectsBox .container .project img {
+    width: 100px; /* you can use % */
+    height: 100px;
+}
+
 #projectsBox .scrollable {
     height: 100%;
     overflow: auto;
