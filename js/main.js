@@ -1,24 +1,44 @@
 /*global $*/
 $(window).load(function () {
 
+    const DEBUG = true;
+
+    //I forget to disable these sort of things
+    if (DEBUG) {
+        console.log('%c⚠️ DEBUG MODE IS ENABLED ⚠️', 'color: red; font-size: 30px');
+    }
+
     (function () {
+
+
+
+
+
         var mode = 0;
         $(".projectButton").click(function () {
             if (mode == 0) {
                 $("#projectsBox").fadeIn();
                 $(".darkerOverlay").fadeIn();
                 $('.container').isotope(); //relay the grid out when we open it. ot sure why it does not like hidden divs.
+
+                //automatically select the search button
+                $(".quicksearch").select();
+
                 mode = 1;
-            } else {
+            } 
+            else {
                 $("#projectsBox").fadeOut();
                 $(".darkerOverlay").fadeOut();
+
+                //automatically de-select the search button
+                $(".quicksearch").blur();
+
                 mode = 0;
             }
 
 
-        });
 
-        $('#myAudio').prop("volume", 0.3);
+        });
 
         var $animate, $container, $message, $paragraph, MESSAGES, animate, initialise, scramble;
         MESSAGES = [];
@@ -164,9 +184,9 @@ $(window).load(function () {
     var container = $('.container');
     var dataArray = [];
 
-    const DEBUG = false;
 
-    $.when(doAjaxGitRequest(1), doAjaxGitRequest(2), doImgJsonRequest()).done(function (a1, a2) {
+
+    $.when(doAjaxGitRequest(1), doAjaxGitRequest(2), doImgJsonRequest(), doLaunchableJsonRequest()).done(function (a1, a2) {
 
         if (DEBUG) {
             console.log("Finished all ajax requests: " + dataArray.length);
@@ -200,7 +220,7 @@ $(window).load(function () {
                 $.each(data, function (i, item) {
 
                     var theObj = data[i];
-                    
+
                     dataArray.push(theObj);
                 });
 
@@ -212,7 +232,7 @@ $(window).load(function () {
 
     function doImgJsonRequest() {
         return $.ajax({
-            url: "images.json",
+            url: "json/images.json",
             /*method: "GET",*/
             dataType: "json",
             success: function (data) {
@@ -221,9 +241,30 @@ $(window).load(function () {
                     imageDataArray.push(data[i]);
 
                 });
-                
+
                 if (DEBUG) {
                     console.log(imageDataArray);
+                }
+            }
+        });
+    }
+
+    var launchableDataArray = [];
+
+    function doLaunchableJsonRequest() {
+        return $.ajax({
+            url: "json/launchable.json",
+            /*method: "GET",*/
+            dataType: "json",
+            success: function (data) {
+                $.each(data, function (i, item) {
+                    //console.log(data[i]);
+                    launchableDataArray.push(data[i]);
+
+                });
+
+                if (DEBUG) {
+                    console.log(launchableDataArray);
                 }
             }
         });
@@ -232,17 +273,42 @@ $(window).load(function () {
     function addDatasetToViewableContent(item) {
         var content = '<div class="project">\n';
         content = content + '<img src="images/' + getImage(item) + '.png">\n';
-        content = content + '<h2 class="header">' + getDisplayName(item.name) + '</h2>\n';
+        content = content + '<h2 class="header" repo=' + item.name + '>' + getDisplayName(item.name) + '</h2>\n';
         content = content + '<p class="description">' + getDescription(item.description) + '</p>\n';
-        content = content + '<a class="btn" href="' + item.html_url + '" title="View Project">View Project</a>\n';
+
+        var launchLinkObj = getLaunchableLink(item);
+        if (launchLinkObj != null && launchLinkObj.link != null) {
+            
+            var disabledText = (launchLinkObj.disabled ? " btnDisabled" : "");
+            
+            content = content + '<a class="btn btnLaunchProject' + disabledText + '" href="projects/' + launchLinkObj.link + '" title="Launch Project">Launch Project</a>\n';
+        }
+
+        content = content + '<a class="btn btnViewProject" href="' + item.html_url + '" title="View Project">View Project</a>\n';
         content = content + '</div>';
         container.append(content);
     }
 
+    function getLaunchableLink(item) {
 
-    
+        for (var i = 0; i < launchableDataArray.length; i++) {
+            var launchData = launchableDataArray[i];
+            if (item.name === launchData.replace("*", "")) {
+                var obj = new Object();
+                obj.link = launchData;
+                obj.disabled = launchData.startsWith("*");
+                return obj;
+            }
+        }
+
+        return null;
+
+    }
+
+
+
     function getImage(item) {
-      
+
         /*
         
         This makes no sence, but I got it working, 
@@ -278,10 +344,9 @@ $(window).load(function () {
                 if (name.startsWith(imgData.name) || name.includes(desc)) {
                     return imgData.img;
                 }
-            } 
-            
+            }
+
             //get image based off of language
-            
             else if (lang == "HTML" || lang == "Java" || lang == "PHP" || lang == "C++" || lang == "JavaScript" || lang == "CSS" || lang == "C#" || lang == "Logos" || lang == "Shell" || lang == "Lua" || lang == "Visual Basic" || lang == "C" || lang == "TypeScript" || lang == "Python" || lang == "Arduino") {
                 return "lang/" + lang.replace("#", "Sharp");
             }
@@ -393,33 +458,35 @@ $(window).load(function () {
             };
         }
     }
-    
-    
-    
+
+
+
     //displaying images in the console
-	console.image = function(url, scale) {
-		scale = scale || 1;
-		var img = new Image();
+    console.image = function (url, scale) {
+        scale = scale || 1;
+        var img = new Image();
 
-		img.onload = function() {
-			var dim = getBox(this.width * scale, this.height * scale);
-			console.log("%c ", dim.style + "background: url(" + url + "); background-size: " + (this.width * scale) + "px " + (this.height * scale) + "px; color: transparent;");
-		};
+        img.onload = function () {
+            var dim = getBox(this.width * scale, this.height * scale);
+            console.log("%c ", dim.style + "background: url(" + url + "); background-size: " + (this.width * scale) + "px " + (this.height * scale) + "px; color: transparent;");
+        };
 
-		img.src = url;
-	};
-    
-	function getBox(width, height) {
-		return {
-			string: "+",
-			style: "font-size: 1px; padding: 0 " + Math.floor(width/2) + "px; line-height: " + height + "px;"
-		}
-	}
+        img.src = url;
+    };
+
+    function getBox(width, height) {
+        return {
+            string: "+",
+            style: "font-size: 1px; padding: 0 " + Math.floor(width / 2) + "px; line-height: " + height + "px;"
+        }
+    }
 
 
     //fun little developer message :)
     console.log("Hi there, fellow developer! Thanks for visiting my personal website! \n\nMy code is a MESS. Like a real cluster f**k. Its basically just patches on top of patches in hopes things work. \n\nTheres also a lot of code that just need to be removed because it never is actually called. \n\nI’d love to hear what you think though about my website though! \n\nFeel free to poke around in the code, or you can video the code on GitHub: \nhttps://github.com/egold555/eric.golde.org \n\nLast Updated: 1/7/2020 11:45 PM");
-    
+
     console.image("https://eric.golde.org/images/Avatar.png", 1);
+
+
 
 });
