@@ -271,6 +271,12 @@ $(window).load(function () {
     }
 
     function addDatasetToViewableContent(item) {
+        
+        //I didn't make forks, don't include them on display.
+        if(item.fork){
+            return; 
+        }
+        
         var content = '<div class="project">\n';
         content = content + '<img src="images/' + getImage(item) + '.png">\n';
         content = content + '<h2 class="header" repo=' + item.name + '>' + getDisplayName(item.name) + '</h2>\n';

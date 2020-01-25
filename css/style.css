@@ -10,45 +10,6 @@ body {
     z-index: -2;
 }
 
-/*.buttonn {
-    font-family: "Dosis";
-    appearance: none;
-    backface-visibility: hidden;
-    background: #303030;
-    border-radius: 3px;
-    border: none;
-    box-shadow: inset 0 -100px 0 rgba(41, 41, 41, 0);
-    color: #fff;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 22px;
-    font-weight: 500;
-    margin-bottom: 20px;
-    outline: none;
-    overflow: hidden;
-    padding: 12px 22px;
-    position: relative;
-    text-decoration: none;
-    transform: translate3d(0, 0, 0);
-    transition: 0.25s;
-    user-select: none !important;
-    vertical-align: top;
-    white-space: nowrap;
-    width: 100% !important;
-}
-
-.buttonn:hover {
-    transition: 0.25s !important;
-    opacity: 1;
-    box-shadow: inset 0 -100px 0 rgba(41, 41, 41, 0.15), 0 4px 6px 0 rgba(0, 0, 0, .1), 0 1px 10px 0 rgba(0, 0, 0, .1), 0 2px 4px -1px rgba(0, 0, 0, .1);
-}
-
-.buttonn:active {
-    transition: -webkit-transform 0.25s, opacity 0.25s, position 0s !important;
-    box-shadow: inset 0 -100px 0 rgba(0, 0, 0, 0.2), 0 3px 6px 0 rgba(0, 0, 0, .1), 0 0px 10px 0 rgba(0, 0, 0, .1), 0 1px 4px -1px rgba(0, 0, 0, .1);
-    top: 1px;
-}*/
-
 table {
     border-collapse: collapse;
     border-spacing: 0;
