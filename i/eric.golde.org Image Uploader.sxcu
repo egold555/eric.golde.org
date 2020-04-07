@@ -1,0 +1,13 @@
+﻿{
+  "Version": "13.1.0",
+  "Name": "eric.golde.org Image Uploader",
+  "DestinationType": "ImageUploader",
+  "RequestMethod": "POST",
+  "RequestURL": "https://eric.golde.org/i/upload.php",
+  "Body": "MultipartFormData",
+  "Arguments": {
+    "secret": "your_secret_here"
+  },
+  "FileFormName": "sharex",
+  "URL": "https://eric.golde.org/i/$response$"
+}

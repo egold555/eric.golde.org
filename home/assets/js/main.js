@@ -1,7 +1,8 @@
 /*global $*/
 $(window).load(function () {
 
-    const DEBUG = true;
+    const DEBUG = false;
+	const lastUpdated = "4/6/2020 9:33 PM";
 
     //I forget to disable these sort of things
     if (DEBUG) {
@@ -232,7 +233,7 @@ $(window).load(function () {
 
     function doImgJsonRequest() {
         return $.ajax({
-            url: "json/images.json",
+            url: "home/assets/json/images.json",
             /*method: "GET",*/
             dataType: "json",
             success: function (data) {
@@ -253,7 +254,7 @@ $(window).load(function () {
 
     function doLaunchableJsonRequest() {
         return $.ajax({
-            url: "json/launchable.json",
+            url: "home/assets/json/launchable.json",
             /*method: "GET",*/
             dataType: "json",
             success: function (data) {
@@ -278,7 +279,7 @@ $(window).load(function () {
         }
         
         var content = '<div class="project">\n';
-        content = content + '<img src="images/' + getImage(item) + '.png">\n';
+        content = content + '<img src="home/assets/images/' + getImage(item) + '.png">\n';
         content = content + '<h2 class="header" repo=' + item.name + '>' + getDisplayName(item.name) + '</h2>\n';
         content = content + '<p class="description">' + getDescription(item.description) + '</p>\n';
 
@@ -287,7 +288,7 @@ $(window).load(function () {
             
             var disabledText = (launchLinkObj.disabled ? " btnDisabled" : "");
             
-            content = content + '<a class="btn btnLaunchProject' + disabledText + '" href="projects/' + launchLinkObj.link + '" title="Launch Project">Launch Project</a>\n';
+            content = content + '<a class="btn btnLaunchProject' + disabledText + '" href="home/projects/' + launchLinkObj.link + '" title="Launch Project">Launch Project</a>\n';
         }
 
         content = content + '<a class="btn btnViewProject" href="' + item.html_url + '" title="View Project">View Project</a>\n';
@@ -468,6 +469,7 @@ $(window).load(function () {
 
 
     //displaying images in the console
+	/*
     console.image = function (url, scale) {
         scale = scale || 1;
         var img = new Image();
@@ -486,12 +488,12 @@ $(window).load(function () {
             style: "font-size: 1px; padding: 0 " + Math.floor(width / 2) + "px; line-height: " + height + "px;"
         }
     }
-
+*/
 
     //fun little developer message :)
-    console.log("Hi there, fellow developer! Thanks for visiting my personal website! \n\nMy code is a MESS. Like a real cluster f**k. Its basically just patches on top of patches in hopes things work. \n\nTheres also a lot of code that just need to be removed because it never is actually called. \n\nI’d love to hear what you think though about my website though! \n\nFeel free to poke around in the code, or you can video the code on GitHub: \nhttps://github.com/egold555/eric.golde.org \n\nLast Updated: 1/7/2020 11:45 PM");
+    console.log("Hi there, fellow developer! Thanks for visiting my personal website! \n\nMy code is a MESS. Like a real cluster f**k. Its basically just patches on top of patches in hopes things work. \n\nTheres also a lot of code that just need to be removed because it never is actually called. \n\nI’d love to hear what you think though about my website though! \n\nFeel free to poke around in the code, or you can video the code on GitHub: \nhttps://github.com/egold555/eric.golde.org \n\nLast Updated: " + lastUpdated);
 
-    console.image("https://eric.golde.org/images/Avatar.png", 1);
+    //console.image("https://eric.golde.org/home/assets/images/Avatar.png", 1);
 
 
 

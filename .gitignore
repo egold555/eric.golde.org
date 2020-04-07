@@ -1,2 +1,4 @@
+home/projects/*
+!home/projects/.htaccess
 
-projects/
+
