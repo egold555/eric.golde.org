@@ -2,7 +2,7 @@
 $(window).load(function () {
 
     const DEBUG = false;
-    const lastUpdated = "5/21/2022 7:00 PM";
+    const lastUpdated = "2/18/2024 10:11 PM";
 
     //I forget to disable these sort of things
     if (DEBUG) {
